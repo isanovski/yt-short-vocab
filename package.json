@@ -1,0 +1,26 @@
+{
+  "name": "eng-short",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "dependencies": {
+    "@remotion/cli": "^4.0.543",
+    "@remotion/google-fonts": "^4.0.543",
+    "@types/react": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.543",
+    "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6"
+  }
+}
