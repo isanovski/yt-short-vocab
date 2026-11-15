@@ -1,9 +1,9 @@
 import React from 'react';
 import { Composition } from 'remotion';
 import { VocabQuiz } from './compositions/VocabQuiz';
-import { loadConfig } from './config';
+import { VOCAB_CONFIG } from './config';
 
-const cfg = loadConfig();
+const cfg = VOCAB_CONFIG;
 
 export const RemotionRoot: React.FC = () => (
   <Composition

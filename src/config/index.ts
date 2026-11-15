@@ -27,12 +27,6 @@ export {
 };
 export { VOCAB_CONFIG } from './default.ts';
 
-export function loadConfig(configPath?: string): VideoConfig {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const cfg = require(configPath || './default') as VideoConfig;
-  return cfg;
-}
-
 export function getTotalFrames(cfg: VideoConfig): number {
   const { fps } = cfg.video;
   const { timerSeconds, revealSeconds, outroSeconds } = cfg.timing;
