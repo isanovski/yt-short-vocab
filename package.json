@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "commonjs",
+  "browser": {
+    "fs": false,
+    "crypto": false,
+    "path": false,
+    "os": false
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "type": "commonjs",
   "dependencies": {
     "@remotion/cli": "^4.0.543",
     "@remotion/google-fonts": "^4.0.543",

@@ -1,12 +1,12 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
 import { Question } from '../scenes/Question';
-import { loadConfig } from '../config';
+import { VOCAB_CONFIG } from '../config/default.ts';
 import { makeTheme } from '../theme';
 import type { ThemeTokens } from '../theme';
 
 export const VocabQuiz: React.FC = () => {
-  const cfg = loadConfig();
+  const cfg = VOCAB_CONFIG;
   const tokens = makeTheme(cfg);
 
   return (

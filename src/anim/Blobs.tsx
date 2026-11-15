@@ -3,7 +3,7 @@ import { useCurrentFrame } from 'remotion';
 import { AbsoluteFill } from 'remotion';
 import type { Blob } from '../config';
 
-export const Blobs: React.FC<{ blobs: Blob[]; speed?: number }> = ({
+export const Blobs: React.FC<{ blobs: readonly Blob[]; speed?: number }> = ({
   blobs,
   speed = 1,
 }) => {

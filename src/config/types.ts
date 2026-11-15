@@ -1,81 +1,81 @@
 export type Blob = {
-  size: number;
-  color: string;
-  opacity: number;
-  speed: number;
+  readonly size: number;
+  readonly color: string;
+  readonly opacity: number;
+  readonly speed: number;
 };
 
 export type Word = {
-  idn: string;
-  correct: string;
-  opts: string[];
+  readonly idn: string;
+  readonly correct: string;
+  readonly opts: readonly string[];
 };
 
 export type ContentType = 'quiz' | 'vocab';
 
 export type Theme = {
-  base: string;
-  surface: string;
-  hero: string;
-  violet: string;
-  text: string;
-  dim: string;
-  ok: string;
-  bad: string;
-  warn: string;
-  line: string;
+  readonly base: string;
+  readonly surface: string;
+  readonly hero: string;
+  readonly violet: string;
+  readonly text: string;
+  readonly dim: string;
+  readonly ok: string;
+  readonly bad: string;
+  readonly warn: string;
+  readonly line: string;
 };
 
 export type Typography = {
-  fontFamily: string;
-  sizes: { sm: number; md: number; lg: number; xl: number; hero: number };
-  spacing: { xs: number; sm: number; md: number; lg: number; xl: number; xxl: number };
+  readonly fontFamily: string;
+  readonly sizes: { readonly sm: number; readonly md: number; readonly lg: number; readonly xl: number; readonly hero: number };
+  readonly spacing: { readonly xs: number; readonly sm: number; readonly md: number; readonly lg: number; readonly xl: number; readonly xxl: number };
 };
 
 export type Background = {
-  type: 'blobs';
-  blobs: Blob[];
+  readonly type: 'blobs';
+  readonly blobs: readonly Blob[];
 };
 
 export type Content = {
-  type: ContentType;
-  words: Word[];
-  introHook: string;
-  pauseLabel: string;
-  scoreLabel: string;
-  ctaLabel: string;
+  readonly type: ContentType;
+  readonly words: readonly Word[];
+  readonly introHook: string;
+  readonly pauseLabel: string;
+  readonly scoreLabel: string;
+  readonly ctaLabel: string;
 };
 
 export type Timing = {
-  timerSeconds: number;
-  revealSeconds: number;
-  outroSeconds: number;
+  readonly timerSeconds: number;
+  readonly revealSeconds: number;
+  readonly outroSeconds: number;
 };
 
 export type Audio = {
-  bgmGain: number;
-  sfxGain: number;
+  readonly bgmGain: number;
+  readonly sfxGain: number;
 };
 
 export type Output = {
-  filename: string;
-  crf: number;
+  readonly filename: string;
+  readonly crf: number;
 };
 
 export type VideoConfig = {
-  video: {
-    id: string;
-    title: string;
-    fps: number;
-    width: number;
-    height: number;
-    durationSeconds: number;
+  readonly video: {
+    readonly id: string;
+    readonly title: string;
+    readonly fps: number;
+    readonly width: number;
+    readonly height: number;
+    readonly durationSeconds: number;
   };
-  theme: Theme;
-  typography: Typography;
-  background: Background;
-  content: Content;
-  timing: Timing;
-  audio: Audio;
-  output: Output;
+  readonly theme: Theme;
+  readonly typography: Typography;
+  readonly background: Background;
+  readonly content: Content;
+  readonly timing: Timing;
+  readonly audio: Audio;
+  readonly output: Output;
 };

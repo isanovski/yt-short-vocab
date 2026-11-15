@@ -11,7 +11,9 @@ export const VOCAB_CONFIG = {
     base: '#020617',
     surface: '#0B1120',
     hero: '#06B6D4',
+    violet: '#8B5CF6',
     text: '#F8FAFC',
+    dim: '#94A3B8',
     ok: '#22C55E',
     bad: '#EF4444',
     warn: '#FBBF24',
@@ -55,4 +57,4 @@ export const VOCAB_CONFIG = {
     filename: 'vocab-quiz-final.mp4',
     crf: 22,
   },
-};
+} as const;

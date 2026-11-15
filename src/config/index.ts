@@ -25,7 +25,7 @@ export {
   Output,
   VideoConfig,
 };
-export { VOCAB_CONFIG } from './default';
+export { VOCAB_CONFIG } from './default.ts';
 
 export function loadConfig(configPath?: string): VideoConfig {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
