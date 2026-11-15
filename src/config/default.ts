@@ -42,21 +42,9 @@ export const VOCAB_CONFIG: VideoConfig = {
     mode: 'fixed',
     randomCount: 3,
     words: [
-      {
-        idn: 'Meminjam',
-        correct: 'Borrow',
-        opts: ['Borrow', 'Lend', 'Bring', 'Buy'],
-      },
-      {
-        idn: 'Memberi tahu',
-        correct: 'Tell',
-        opts: ['Tell', 'Say', 'Talk', 'Speak'],
-      },
-      {
-        idn: 'Ingat',
-        correct: 'Remember',
-        opts: ['Remember', 'Remind', 'Forget', 'Realize'],
-      },
+      { idn: 'Sulit', correct: 'Difficult', opts: ['Difficult', 'Easy', 'Simple', 'Hard'] },
+      { idn: 'Baru', correct: 'New', opts: ['New', 'Old', 'Fresh', 'Clean'] },
+      { idn: 'Besar', correct: 'Large', opts: ['Large', 'Small', 'Tiny', 'Short'] },
     ],
     introHook: '9 DARI 10 GAGAL',
     pauseLabel: 'JAWAB DULU SEBELUM DIBUKA',
