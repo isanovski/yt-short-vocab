@@ -179,7 +179,7 @@ const Intro: React.FC<{ local: number }> = ({ local }) => {
           color: COLORS.ink,
         }}
       >
-        3 kata.
+        {words.length} kata.
       </Text>
 
       <div

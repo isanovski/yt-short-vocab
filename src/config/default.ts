@@ -43,19 +43,19 @@ export const VOCAB_CONFIG: VideoConfig = {
     randomCount: 3,
     words: [
       {
-        idn: 'Tidak memihak',
-        correct: 'Impartial',
-        opts: ['Impartial', 'Partial', 'Impassive', 'Imperative'],
+        idn: 'Meminjam',
+        correct: 'Borrow',
+        opts: ['Borrow', 'Lend', 'Bring', 'Buy'],
       },
       {
-        idn: 'Berlimpah',
-        correct: 'Abundant',
-        opts: ['Abundant', 'Abandoned', 'Absurd', 'Adamant'],
+        idn: 'Memberi tahu',
+        correct: 'Tell',
+        opts: ['Tell', 'Say', 'Talk', 'Speak'],
       },
       {
-        idn: 'Gigih',
-        correct: 'Tenacious',
-        opts: ['Tenacious', 'Tedious', 'Terrific', 'Tentative'],
+        idn: 'Ingat',
+        correct: 'Remember',
+        opts: ['Remember', 'Remind', 'Forget', 'Realize'],
       },
     ],
     introHook: '9 DARI 10 GAGAL',
