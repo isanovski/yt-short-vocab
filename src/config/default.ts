@@ -65,9 +65,9 @@ export const VOCAB_CONFIG: VideoConfig = {
   },
   timing: {
     introSeconds: 3,
-    timerSeconds: 7,
-    revealSeconds: 3,
-    outroSeconds: 5,
+    timerSeconds: 5,
+    revealSeconds: 2,
+    outroSeconds: 4,
   },
   audio: {
     bgmGain: 0.6,

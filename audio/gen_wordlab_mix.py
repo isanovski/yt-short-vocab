@@ -9,20 +9,61 @@ Timing HARUS sama dengan komposisi Remotion:
   - fanfare: di awal outro (t = 30s)
 """
 
+import argparse
 import array
 import math
+import pathlib
 import random
+import re
 import wave
 
 SR = 44100
-DUR = 38.0
-N = int(SR * DUR)
-INTRO = 3.0
-TIMER = 7
-REVEAL = 3
+
+CONFIG_PATH = pathlib.Path(__file__).resolve().parent.parent / "src" / "config" / "default.ts"
+OUT_PATH = pathlib.Path(__file__).resolve().parent / "sfx" / "wordlab_mix.wav"
+
+
+def read_config():
+    """Baca timing & jumlah kata dari src/config/default.ts.
+
+    Sumber tunggal kebenaran: kalau timer/outro diubah di config, SFX ikut pindah
+    otomatis sehingga tick selalu jatuh di detik yang sama dengan ring timer.
+    """
+    text = CONFIG_PATH.read_text()
+    if not text:
+        raise SystemExit(f"config kosong: {CONFIG_PATH}")
+
+    def num(key, default):
+        m = re.search(rf"{key}\s*:\s*([0-9]+(?:\.[0-9]+)?)", text)
+        return float(m.group(1)) if m else float(default)
+
+    intro = num("introSeconds", 3)
+    timer = num("timerSeconds", 5)
+    reveal = num("revealSeconds", 2)
+    outro = num("outroSeconds", 4)
+
+    mode_match = re.search(r"mode\s*:\s*'(\w+)'", text)
+    mode = mode_match.group(1) if mode_match else "fixed"
+    if mode == "random":
+        questions = int(num("randomCount", 3))
+    else:
+        questions = len(re.findall(r"\bidn\s*:", text))
+
+    return intro, timer, reveal, outro, max(1, questions)
+
+
+INTRO, TIMER, REVEAL, OUTRO, QUESTIONS = read_config()
+
+parser = argparse.ArgumentParser(description="Mix audio ENGLISH WORD LAB")
+parser.add_argument("--out", default=str(OUT_PATH))
+args = parser.parse_args()
+OUT = pathlib.Path(args.out)
+
 PER_Q = TIMER + REVEAL
-QUESTIONS = 3
-OUTRO_AT = INTRO + QUESTIONS * PER_Q  # 33.0
+DUR = INTRO + QUESTIONS * PER_Q + OUTRO
+N = int(SR * DUR)
+OUTRO_AT = INTRO + QUESTIONS * PER_Q
+TIMER_I = int(TIMER)
 
 left = [0.0] * N
 right = [0.0] * N
@@ -179,8 +220,8 @@ for q in range(QUESTIONS):
     add(q_start, whoosh(), 0.0)
 
     # tick tiap detik countdown; 3 terakhir lebih tegas
-    for k in range(TIMER):
-        amp = 0.30 if k >= TIMER - 3 else 0.16
+    for k in range(TIMER_I):
+        amp = 0.30 if k >= TIMER_I - 3 else 0.16
         add(q_start + k, tick(amp), 0.0)
 
     # ding tepat saat reveal
@@ -203,10 +244,13 @@ for i in range(N):
     data.append(int(max(-1.0, min(1.0, left[i] * gain)) * 32767))
     data.append(int(max(-1.0, min(1.0, right[i] * gain)) * 32767))
 
-with wave.open("/home/ubuntu/eng-short/audio/sfx/wordlab_mix.wav", "wb") as w:
+with wave.open(str(OUT), "wb") as w:
     w.setnchannels(2)
     w.setsampwidth(2)
     w.setframerate(SR)
     w.writeframes(data.tobytes())
 
-print(f"ok: wordlab_mix.wav {DUR}s peak={peak:.3f} gain={gain:.3f}")
+print(
+    f"ok: {OUT.name} {DUR:.1f}s (intro {INTRO:g} + {QUESTIONS}×{PER_Q:g} + outro {OUTRO:g}) "
+    f"peak={peak:.3f} gain={gain:.3f}"
+)

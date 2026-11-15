@@ -64,11 +64,12 @@ const FONT = loadFont('normal', {
 }).fontFamily;
 
 const FPS = 30;
-const INTRO = 3 * FPS;
-const TIMER = 7 * FPS;
-const REVEAL = 3 * FPS;
+/* Semua timing dibaca dari config supaya ubah durasi tidak perlu sentuh kode. */
+const INTRO = VOCAB_CONFIG.timing.introSeconds * FPS;
+const TIMER = VOCAB_CONFIG.timing.timerSeconds * FPS;
+const REVEAL = VOCAB_CONFIG.timing.revealSeconds * FPS;
 const PER_Q = TIMER + REVEAL;
-const OUTRO = 5 * FPS;
+const OUTRO = VOCAB_CONFIG.timing.outroSeconds * FPS;
 
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
 const ease = (n: number) => Easing.out(Easing.cubic)(clamp(n));

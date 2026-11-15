@@ -1,7 +1,8 @@
 # eng-short — English Word Lab (YouTube Shorts)
 
-Remotion project untuk Shorts kuis kosakata bahasa Inggris: 1080×1920 @30fps, **38 detik**
-(3s intro + 3 kata × [7s timer + 3s reveal] + 5s outro). Tanpa GPU, render ~8 menit di VPS 2 vCPU.
+Remotion project untuk Shorts kuis kosakata bahasa Inggris: 1080×1920 @30fps (Full HD vertikal), **28 detik**
+(3s intro + 3 kata × [5s timer + 2s reveal] + 4s outro). Semua timing dibaca dari
+`src/config/default.ts`, jadi durasi bisa diubah tanpa menyentuh kode. Tanpa GPU, render ~6 menit di VPS 2 vCPU.
 
 Desain sengaja editorial-terang: latar terang, teks gelap, dan **warna dipilih acak tiap render**.
 
@@ -75,7 +76,9 @@ ffmpeg -y -i out/nama.mp4 -i audio/sfx/wordlab_mix.wav \
 
 ## Audio
 
-`audio/gen_wordlab_mix.py` membuat semuanya dari nol (stdlib Python saja):
+`audio/gen_wordlab_mix.py` membuat semuanya dari nol (stdlib Python saja) dan **membaca timing
+langsung dari `src/config/default.ts`**, jadi tick selalu jatuh di detik yang sama dengan ring timer.
+Durasi total = `intro + jumlah kata × (timer + reveal) + outro`.
 
 - BGM pad akor (Am–F–C–G), loop, gain rendah.
 - `tick` tiap detik countdown; 3 tick terakhir lebih tegas.
