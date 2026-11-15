@@ -1,92 +1,99 @@
-# eng-short — Faceless YouTube Shorts Motion Graphics
+# eng-short — English Word Lab (YouTube Shorts)
 
-Remotion-based motion graphics for animated quiz/vocab Shorts (1080×1920 @30fps).
-Code-driven, deterministic, GPU-free. Config-driven: swap `config/default.json`
-to make a new video without touching code.
+Remotion project untuk Shorts kuis kosakata bahasa Inggris: 1080×1920 @30fps, **38 detik**
+(3s intro + 3 kata × [7s timer + 3s reveal] + 5s outro). Tanpa GPU, render ~8 menit di VPS 2 vCPU.
 
-## What it is
+Desain sengaja editorial-terang: latar terang, teks gelap, dan **warna dipilih acak tiap render**.
 
-A Remotion project that renders a vocabulary quiz Short:
-
-1. **Intro hook** (frame 0): `"9 DARI 10 GAGAL"` (or custom hook from config)
-2. **3 questions** × (7s timer + 3s reveal): word → answer + green banner
-3. **Outro** (5s): `KAMU BENAR BERAPA?` + score + CTA
-
-Total: **35 seconds**. All text centered in YouTube Shorts safe zone. Audio (BGM + SFX) mixed from Python.
-
-## Repo layout
+## Struktur
 
 ```
-eng-short/
-├── src/
-│   ├── index.ts              # Remotion entry (registers Root)
-│   ├── Root.tsx              # Composition wrapper
-│   ├── config.ts             # VideoConfig type + loadConfig()
-│   ├── theme.ts              # makeTheme(cfg) → ThemeTokens
-│   ├── anim/
-│   │   ├── index.ts          # Enter, Shake, PopIn
-│   │   └── Blobs.tsx         # Animated background blobs + vignette
-│   ├── components/
-│   │   ├── HookLabel.tsx     # Top hook pill ("9 DARI 10 GAGAL")
-│   │   ├── Timer.tsx         # Countdown + progress bar with punch
-│   │   ├── OptionCard.tsx    # A/B/C/D card with correct/wrong state + shake
-│   │   ├── CorrectBanner.tsx # "JAWABAN BENAR: X" reveal banner
-│   │   └── Pill.tsx          # Rounded button (MULAI / FOLLOW)
-│   ├── scenes/
-│   │   ├── Intro.tsx         # Intro screen (currently INTRO=0, skipped)
-│   │   ├── Question.tsx      # Quiz question: word, timer, options, banner
-│   │   └── Outro.tsx         # Score + CTA (loop-friendly fade)
-│   └── compositions/
-│       └── VocabQuiz.tsx     # Main composition: loads config, maps words → scenes
+src/
+├── index.ts                     # entry Remotion
+├── Root.tsx                     # komposisi VocabQuiz + hitung durasi
+├── compositions/VocabQuiz.tsx   # seluruh scene (intro, soal, outro)
+├── lib/rng.ts                   # RNG deterministik dari seed (mulberry32)
 ├── config/
-│   └── default.json          # THE file to edit for a new video
-├── audio/
-│   └── mix_quiz_v21.py       # Generates full_mix_v3.wav (BGM + SFX)
-├── out/
-│   └── vocab-quiz-final.mp4  # Latest render
-├── README.md
-├── .gitignore
-├── package.json
-├── tsconfig.json
-└── LICENSE
+│   ├── default.ts               # KONFIGURASI VIDEO (kata, mode, seed, timing)
+│   ├── palettes.ts              # 8 palet warna terkurasi (dipilih acak)
+│   ├── wordbank.ts              # 24 kosakata B2–C1 untuk mode acak
+│   ├── types.ts                 # tipe VideoConfig
+│   └── index.ts                 # re-export + getTotalFrames()
+├── theme.ts                     # (legacy, tidak dipakai komposisi baru)
+├── anim/ components/ scenes/    # (legacy dari versi kuis sebelumnya)
+audio/
+├── gen_wordlab_mix.py           # generator BGM + SFX (38s, sinkron timer)
+└── sfx/wordlab_mix.wav          # hasil mix yang dipakai render
 ```
 
-## How to make a new video
+## Aturan desain
 
-1. **Copy `config/default.json` to `config/<your-video>.json`**.
-2. Edit `config/<your-video>.json`:
-   - Change `VOCAB.content.words` (idn/correct/opts) for new quiz words.
-   - Change `VOCAB.content.introHook`, `pauseLabel`, `scoreLabel`, `ctaLabel`.
-   - Change `VOCAB.theme.*` colors for a different look.
-   - Change `VOCAB.background.blobs` colors/speeds for different motion.
-   - Change `VOCAB.timing.*` for different pacing.
-3. **Regenerate audio** (optional):
-   ```bash
-   python audio/mix_quiz_v21.py
-   ```
-4. **Render**:
-   ```bash
-   ./node_modules/.bin/remotion render src/index.ts VocabQuiz out/<your-video>.mp4 --concurrency=1
-   ```
-5. **Mux audio**:
-   ```bash
-   ffmpeg -y -i out/<your-video>.mp4 -i audio/sfx/full_mix_v3.wav \
-     -c:v copy -c:a aac -b:a 192k -shortest -map 0:v:0 -map 1:a:0 out/<your-video>-final.mp4
-   ```
+- **Semua elemen di tengah** (kata, ring timer, kartu opsi, outro). Tidak ada hook, badge "1/3",
+  label "translate this", atau teks bantu di scene kuis.
+- **Kartu opsi tanpa huruf A–D** — hanya katanya.
+- **Jawaban benar ditandai sekali**: kartu jadi warna aksen + border tegas, kartu lain diredupkan.
+  Tidak ada banner "JAWABAN BENAR", tidak ada contoh kalimat.
+- **Timer ring mengosongkan** (countdown), lalu jadi ✓ saat reveal.
+- Motion kalem: satu spring masuk (`damping 18, stiffness 220`), stagger 2 frame per kartu.
+- Safe zone YouTube Shorts: teks hanya di `y ∈ [380, 1540]`.
 
-## Key design decisions
+## Warna acak tiap video
 
-- **No intro screen** — hook appears at frame 0 as a pill label above the first question (retention best practice).
-- **Single color theme** — one hero color per frame; blobs add motion without distraction.
-- **Timer punch** — number scales 1.2× each second (squash & stretch) synced to tick SFX.
-- **Pattern interrupt** — question 2 opens with a black flash + hook text (resets attention at ~10s).
-- **Cognitive relief** — card shake decays after ~0.7s; reveal banner slides in smoothly.
-- **Loop-friendly outro** — fades to black in last 0.4s so it loops back to frame 0.
+Palet dipilih acak dari `src/config/palettes.ts` setiap render, dan dicatat di log:
 
-## Safe zone
+```
+[wordlab] seed=1757900000000-482913 palette=ocean words=Impartial / Abundant / Tenacious
+```
 
-All text stays within x∈[0,960], y∈[380,1540] (YouTube Shorts template: top/bottom dead 380px, right dead 120px).
+- Mau warna lain? Render ulang — ada 8 palet.
+- Mau mengulang warna & kata yang sama? Set `VOCAB_SEED`:
+
+```bash
+VOCAB_SEED=ocean-1 ./node_modules/.bin/remotion render src/index.ts VocabQuiz out/v.mp4 --concurrency=1
+```
+
+- Mau permanen? Isi `video.seed` di `src/config/default.ts` dengan string apa pun.
+
+## Alur bikin video baru
+
+1. **Tanyakan dulu ke user** mau kosakata apa (tema atau daftar kata). Jangan pilih sendiri.
+2. Pilih mode di `src/config/default.ts`:
+   - `content.mode: 'fixed'` → tulis kata pilihan user di `content.words`
+     (`{ idn, correct, opts: [4 opsi] }`; distractor sebaiknya mirip supaya tidak mudah).
+   - `content.mode: 'random'` + `content.randomCount: 3` → ambil acak dari `src/config/wordbank.ts`.
+3. Warna tidak perlu diatur — otomatis acak (isi `video.seed` kalau mau dikunci).
+4. Render + mix audio:
+
+```bash
+cd /home/ubuntu/eng-short
+rm -rf node_modules/.cache node_modules/.remotion
+./node_modules/.bin/remotion render src/index.ts VocabQuiz out/nama.mp4 --concurrency=1 --log=error
+python3 audio/gen_wordlab_mix.py
+ffmpeg -y -i out/nama.mp4 -i audio/sfx/wordlab_mix.wav \
+  -c:v copy -c:a aac -b:a 192k -shortest -map 0:v:0 -map 1:a:0 out/nama-final.mp4
+```
+
+## Audio
+
+`audio/gen_wordlab_mix.py` membuat semuanya dari nol (stdlib Python saja):
+
+- BGM pad akor (Am–F–C–G), loop, gain rendah.
+- `tick` tiap detik countdown; 3 tick terakhir lebih tegas.
+- `ding` arpeggio tepat di frame reveal (t = 10s, 20s, 30s).
+- `whoosh` di awal tiap soal + intro; `riser` menjelang soal pertama.
+- `fanfare` di awal outro (t = 33s). Output 38s, peak ~0.89.
+
+## Perintah lain
+
+```bash
+npx tsc --noEmit                     # cek tipe (harus bersih)
+./node_modules/.bin/remotion still src/index.ts VocabQuiz out/cek.png --frame=150
+ffprobe -v error -show_entries format=duration,size -of default=nw=1 out/nama-final.mp4
+```
+
+**Penting:** kalau hasil render masih terlihat seperti kode lama, hapus cache bundler:
+`rm -rf node_modules/.cache node_modules/.remotion`.
 
 ## License
 
-MIT
+All Rights Reserved — lihat `LICENSE`.

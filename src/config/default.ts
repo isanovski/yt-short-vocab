@@ -1,19 +1,22 @@
-export const VOCAB_CONFIG = {
+import type { VideoConfig } from './types';
+
+export const VOCAB_CONFIG: VideoConfig = {
   video: {
-    id: 'vocab-quiz-v21',
+    id: 'vocab-quiz',
     title: 'English Vocabulary Quiz',
     fps: 30,
     width: 1080,
     height: 1920,
-    durationSeconds: 35,
+    durationSeconds: 38,
+    seed: 'auto',
   },
   theme: {
-    base: '#020617',
-    surface: '#0B1120',
-    hero: '#06B6D4',
-    violet: '#8B5CF6',
+    base: '#0A0616',
+    surface: '#140C26',
+    hero: '#A78BFA',
+    violet: '#F472B6',
     text: '#F8FAFC',
-    dim: '#94A3B8',
+    dim: '#A1A1B5',
     ok: '#22C55E',
     bad: '#EF4444',
     warn: '#FBBF24',
@@ -27,17 +30,33 @@ export const VOCAB_CONFIG = {
   background: {
     type: 'blobs',
     blobs: [
-      { size: 760, color: '#06B6D4', opacity: 0.2, speed: 0.35 },
-      { size: 620, color: '#8B5CF6', opacity: 0.18, speed: 0.28 },
-      { size: 420, color: '#FBBF24', opacity: 0.07, speed: 0.22 },
+      { size: 760, color: '#A78BFA', opacity: 0.22, speed: 0.35 },
+      { size: 620, color: '#F472B6', opacity: 0.16, speed: 0.28 },
+      { size: 420, color: '#22D3EE', opacity: 0.08, speed: 0.22 },
     ],
   },
   content: {
     type: 'quiz',
+    /* mode 'fixed' → pakai daftar words di bawah (hasil pilihan user).
+       mode 'random' → ambil randomCount kata dari src/config/wordbank.ts */
+    mode: 'fixed',
+    randomCount: 3,
     words: [
-      { idn: 'Meski', correct: 'Despite', opts: ['Because', 'Although', 'Since', 'Despite'] },
-      { idn: 'Berarti', correct: 'Significant', opts: ['Minor', 'Significant', 'Trivial', 'Small'] },
-      { idn: 'Penting', correct: 'Essential', opts: ['Optional', 'Essential', 'Useless', 'Minor'] },
+      {
+        idn: 'Tidak memihak',
+        correct: 'Impartial',
+        opts: ['Impartial', 'Partial', 'Impassive', 'Imperative'],
+      },
+      {
+        idn: 'Berlimpah',
+        correct: 'Abundant',
+        opts: ['Abundant', 'Abandoned', 'Absurd', 'Adamant'],
+      },
+      {
+        idn: 'Gigih',
+        correct: 'Tenacious',
+        opts: ['Tenacious', 'Tedious', 'Terrific', 'Tentative'],
+      },
     ],
     introHook: '9 DARI 10 GAGAL',
     pauseLabel: 'JAWAB DULU SEBELUM DIBUKA',
@@ -45,6 +64,7 @@ export const VOCAB_CONFIG = {
     ctaLabel: 'TULIS SKOR DI KOMENTAR',
   },
   timing: {
+    introSeconds: 3,
     timerSeconds: 7,
     revealSeconds: 3,
     outroSeconds: 5,
@@ -54,7 +74,7 @@ export const VOCAB_CONFIG = {
     sfxGain: 1.0,
   },
   output: {
-    filename: 'vocab-quiz-final.mp4',
+    filename: 'vocab-quiz-violet.mp4',
     crf: 22,
   },
 } as const;

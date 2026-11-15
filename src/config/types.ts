@@ -40,6 +40,9 @@ export type Background = {
 export type Content = {
   readonly type: ContentType;
   readonly words: readonly Word[];
+  /** 'fixed' = pakai words di atas; 'random' = ambil acak dari WORD_BANK */
+  readonly mode: 'fixed' | 'random';
+  readonly randomCount: number;
   readonly introHook: string;
   readonly pauseLabel: string;
   readonly scoreLabel: string;
@@ -47,6 +50,7 @@ export type Content = {
 };
 
 export type Timing = {
+  readonly introSeconds: number;
   readonly timerSeconds: number;
   readonly revealSeconds: number;
   readonly outroSeconds: number;
@@ -70,6 +74,8 @@ export type VideoConfig = {
     readonly width: number;
     readonly height: number;
     readonly durationSeconds: number;
+    /** 'auto' = seed acak tiap render (warna berubah); isi string lain untuk mengunci. */
+    readonly seed: string;
   };
   readonly theme: Theme;
   readonly typography: Typography;

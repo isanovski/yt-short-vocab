@@ -11,7 +11,10 @@
     "os": false
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "typecheck": "tsc --noEmit",
+    "audio": "python3 audio/gen_wordlab_mix.py",
+    "render": "remotion render src/index.ts VocabQuiz out/video.mp4 --concurrency=1 --log=error",
+    "still": "remotion still src/index.ts VocabQuiz out/check.png --frame=150"
   },
   "keywords": [],
   "dependencies": {

@@ -2,6 +2,8 @@ node_modules/
 out/*.mp4
 out/*.jpg
 out/*.png
+out/*.wav
+audio/sfx/*.wav
 .env
 *.log
 .DS_Store

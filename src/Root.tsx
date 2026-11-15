@@ -10,8 +10,10 @@ export const RemotionRoot: React.FC = () => (
     id="VocabQuiz"
     component={VocabQuiz}
     durationInFrames={
-      cfg.timing.timerSeconds * cfg.video.fps * cfg.content.words.length +
-      cfg.timing.outroSeconds * cfg.video.fps
+      (cfg.timing.introSeconds +
+        (cfg.timing.timerSeconds + cfg.timing.revealSeconds) * cfg.content.words.length +
+        cfg.timing.outroSeconds) *
+      cfg.video.fps
     }
     fps={cfg.video.fps}
     width={cfg.video.width}
