@@ -74,6 +74,18 @@ const OUTRO = VOCAB_CONFIG.timing.outroSeconds * FPS;
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
 const ease = (n: number) => Easing.out(Easing.cubic)(clamp(n));
 
+/* Acak posisi opsi biar jawaban benar tidak selalu di posisi yang sama.
+   Seed berdasarkan index soal + panjang kata, tetap konsisten di seluruh render. */
+function shuffle<T>(arr: readonly T[], seed: number): T[] {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    const j = seed % (i + 1);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 const Text: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({
   children,
   style,
@@ -367,7 +379,7 @@ const Question: React.FC<{ index: number; local: number }> = ({ index, local }) 
           gap: 16,
         }}
       >
-        {word.opts.map((opt, i) => (
+        {shuffle(word.opts, index * 1000 + word.idn.length).map((opt, i) => (
           <Option
             key={opt}
             text={opt}
