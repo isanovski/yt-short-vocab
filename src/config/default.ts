@@ -7,7 +7,7 @@ export const VOCAB_CONFIG: VideoConfig = {
     fps: 30,
     width: 1080,
     height: 1920,
-    durationSeconds: 38,
+    durationSeconds: 28,
     seed: 'auto',
   },
   theme: {
@@ -37,16 +37,14 @@ export const VOCAB_CONFIG: VideoConfig = {
   },
   content: {
     type: 'quiz',
-    /* mode 'fixed' → pakai daftar words di bawah (hasil pilihan user).
-       mode 'random' → ambil randomCount kata dari src/config/wordbank.ts */
-    mode: 'random',
+    mode: 'fixed',
     randomCount: 3,
     words: [
       { idn: 'Sulit', correct: 'Difficult', opts: ['Difficult', 'Easy', 'Simple', 'Hard'] },
       { idn: 'Baru', correct: 'New', opts: ['New', 'Old', 'Fresh', 'Clean'] },
       { idn: 'Besar', correct: 'Large', opts: ['Large', 'Small', 'Tiny', 'Short'] },
     ],
-    introHook: '9 DARI 10 GAGAL',
+    introHook: '3 KATA.',
     pauseLabel: 'JAWAB DULU SEBELUM DIBUKA',
     scoreLabel: 'BENAR BERAPA DARI 3?',
     ctaLabel: 'TULIS SKOR DI KOMENTAR',
@@ -62,7 +60,7 @@ export const VOCAB_CONFIG: VideoConfig = {
     sfxGain: 1.0,
   },
   output: {
-    filename: 'vocab-quiz-violet.mp4',
+    filename: 'vocab-quiz-final.mp4',
     crf: 22,
   },
 } as const;
