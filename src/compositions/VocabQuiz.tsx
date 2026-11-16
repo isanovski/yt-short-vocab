@@ -76,10 +76,11 @@ const ease = (n: number) => Easing.out(Easing.cubic)(clamp(n));
 
 /* Acak posisi opsi biar jawaban benar tidak selalu di posisi yang sama.
    Pakai rng yang sama dengan palette — VOCAB_SEED untuk mengunci hasil. */
-function shuffle<T>(arr: readonly T[], rng: () => number): T[] {
+function shuffle<T>(arr: readonly T[], seed: number): T[] {
   const result = [...arr];
   for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    const j = seed % (i + 1);
     [result[i], result[j]] = [result[j], result[i]];
   }
   return result;
@@ -378,7 +379,7 @@ const Question: React.FC<{ index: number; local: number }> = ({ index, local }) 
           gap: 16,
         }}
       >
-        {shuffle(word.opts, rng).map((opt, i) => (
+        {word.opts.map((opt, i) => (
           <Option
             key={opt}
             text={opt}

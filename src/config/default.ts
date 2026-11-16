@@ -39,7 +39,7 @@ export const VOCAB_CONFIG: VideoConfig = {
     type: 'quiz',
     /* mode 'fixed' → pakai daftar words di bawah (hasil pilihan user).
        mode 'random' → ambil randomCount kata dari src/config/wordbank.ts */
-    mode: 'fixed',
+    mode: 'random',
     randomCount: 3,
     words: [
       { idn: 'Sulit', correct: 'Difficult', opts: ['Difficult', 'Easy', 'Simple', 'Hard'] },
